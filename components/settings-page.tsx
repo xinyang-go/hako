@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { toast } from "sonner"
 import { Loader2, User, Lock, Save } from "lucide-react"
 
@@ -19,13 +19,20 @@ import { useAuth } from "@/components/auth-provider"
 export function SettingsPage() {
   const { user, updateUser } = useAuth()
 
-  const [username, setUsername] = useState(user?.username || "")
-  const [email, setEmail] = useState(user?.email || "")
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
   const [currentPassword, setCurrentPassword] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false)
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username)
+      setEmail(user.email)
+    }
+  }, [user])
 
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
