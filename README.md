@@ -109,7 +109,7 @@ npm run format
 ## 目录结构
 
 ```
-yuzi/
+hako/
 ├── app/                # Next.js App Router
 │   ├── (dashboard)/    # 受保护的仪表板页面
 │   │   └── system/     # 系统模块（监控、设置）

@@ -76,7 +76,7 @@
 ## 2. 项目目录结构
 
 ```
-yuzi/
+hako/
 ├── app/                          # Next.js App Router
 │   ├── (dashboard)/               # 路由组 - 需要认证的页面
 │   │   ├── layout.tsx            # 仪表板布局

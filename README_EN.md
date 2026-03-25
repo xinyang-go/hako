@@ -109,7 +109,7 @@ The documentation includes:
 ## Project Structure
 
 ```
-yuzi/
+hako/
 ├── app/                # Next.js App Router
 │   ├── (dashboard)/    # Protected dashboard pages
 │   │   └── system/     # System module (monitoring, settings)

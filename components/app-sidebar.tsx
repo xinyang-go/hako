@@ -99,7 +99,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             <Server className="size-5 text-sidebar-primary" />
             {!collapsed && (
               <span className="font-semibold text-sidebar-foreground">
-                Admin
+                Hako
               </span>
             )}
           </div>
