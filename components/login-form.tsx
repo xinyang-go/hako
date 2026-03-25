@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useAuth } from "@/components/auth-provider"
 
 export function LoginForm({
@@ -55,9 +55,9 @@ export function LoginForm({
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-6">
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="username">Username</Label>
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="username">Username</FieldLabel>
                 <Input
                   id="username"
                   type="text"
@@ -67,9 +67,9 @@ export function LoginForm({
                   required
                   disabled={isLoading}
                 />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label htmlFor="password">Password</Label>
+              </Field>
+              <Field>
+                <FieldLabel htmlFor="password">Password</FieldLabel>
                 <Input
                   id="password"
                   type="password"
@@ -79,18 +79,21 @@ export function LoginForm({
                   required
                   disabled={isLoading}
                 />
-              </div>
+              </Field>
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
                   <>
-                    <Loader2 className="mr-2 size-4 animate-spin" />
+                    <Loader2
+                      data-icon="inline-start"
+                      className="animate-spin"
+                    />
                     Signing in...
                   </>
                 ) : (
                   "Sign in"
                 )}
               </Button>
-            </div>
+            </FieldGroup>
           </form>
         </CardContent>
       </Card>

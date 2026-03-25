@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useAuth } from "@/components/auth-provider"
 
 export function SettingsPage() {
@@ -77,14 +77,13 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">Manage your account information</p>
       </div>
 
-      <div className="grid gap-6">
-        {/* Profile */}
+      <div className="flex flex-col gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -94,47 +93,51 @@ export function SettingsPage() {
             <CardDescription>Update your personal information</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleUpdateProfile} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="username">Username</Label>
-                <Input
-                  id="username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Enter your username"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isUpdatingProfile}>
-                  {isUpdatingProfile ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Saving...
-                    </>
-                  ) : (
-                    <>
-                      <Save className="mr-2 size-4" />
-                      Save Changes
-                    </>
-                  )}
-                </Button>
-              </div>
+            <form onSubmit={handleUpdateProfile}>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="username">Username</FieldLabel>
+                  <Input
+                    id="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter your username"
+                    required
+                  />
+                </Field>
+                <Field>
+                  <FieldLabel htmlFor="email">Email</FieldLabel>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                  />
+                </Field>
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={isUpdatingProfile}>
+                    {isUpdatingProfile ? (
+                      <>
+                        <Loader2
+                          data-icon="inline-start"
+                          className="animate-spin"
+                        />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save data-icon="inline-start" />
+                        Save Changes
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </FieldGroup>
             </form>
           </CardContent>
         </Card>
 
-        {/* Password */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -144,57 +147,66 @@ export function SettingsPage() {
             <CardDescription>Update your password</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleUpdatePassword} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="currentPassword">Current Password</Label>
-                <Input
-                  id="currentPassword"
-                  type="password"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Enter current password"
-                  required
-                />
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword">New Password</Label>
+            <form onSubmit={handleUpdatePassword}>
+              <FieldGroup>
+                <Field>
+                  <FieldLabel htmlFor="currentPassword">
+                    Current Password
+                  </FieldLabel>
                   <Input
-                    id="newPassword"
+                    id="currentPassword"
                     type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Enter new password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Enter current password"
                     required
                   />
+                </Field>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Field>
+                    <FieldLabel htmlFor="newPassword">New Password</FieldLabel>
+                    <Input
+                      id="newPassword"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="Enter new password"
+                      required
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="confirmPassword">
+                      Confirm Password
+                    </FieldLabel>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm new password"
+                      required
+                    />
+                  </Field>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirm Password</Label>
-                  <Input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    required
-                  />
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={isUpdatingPassword}>
+                    {isUpdatingPassword ? (
+                      <>
+                        <Loader2
+                          data-icon="inline-start"
+                          className="animate-spin"
+                        />
+                        Updating...
+                      </>
+                    ) : (
+                      <>
+                        <Lock data-icon="inline-start" />
+                        Update Password
+                      </>
+                    )}
+                  </Button>
                 </div>
-              </div>
-              <div className="flex justify-end">
-                <Button type="submit" disabled={isUpdatingPassword}>
-                  {isUpdatingPassword ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Updating...
-                    </>
-                  ) : (
-                    <>
-                      <Lock className="mr-2 size-4" />
-                      Update Password
-                    </>
-                  )}
-                </Button>
-              </div>
+              </FieldGroup>
             </form>
           </CardContent>
         </Card>

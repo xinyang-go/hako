@@ -118,7 +118,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-2">
+        <nav className="flex flex-1 flex-col gap-1 p-2">
           {navGroups.map((group) => {
             const isGroupActive = group.items.some(
               (item) =>
@@ -129,7 +129,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
             if (collapsed) {
               // When collapsed, show items directly without collapsible
               return (
-                <div key={group.title} className="space-y-1">
+                <div key={group.title} className="flex flex-col gap-1">
                   <Tooltip disableHoverableContent>
                     <TooltipTrigger asChild>
                       <div className="flex items-center justify-center py-2">
@@ -194,7 +194,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                     />
                   </button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="space-y-1 px-3 py-1">
+                <CollapsibleContent className="flex flex-col gap-1 px-3 py-1">
                   {group.items.map((item) => {
                     const isActive =
                       pathname === item.href ||
@@ -240,13 +240,17 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
                 >
                   {theme === "dark" ? (
                     <>
-                      <Sun className="size-4 shrink-0" />
-                      {!collapsed && <span className="ml-2">Light Mode</span>}
+                      <Sun
+                        data-icon={!collapsed ? "inline-start" : undefined}
+                      />
+                      {!collapsed && <span>Light Mode</span>}
                     </>
                   ) : (
                     <>
-                      <Moon className="size-4 shrink-0" />
-                      {!collapsed && <span className="ml-2">Dark Mode</span>}
+                      <Moon
+                        data-icon={!collapsed ? "inline-start" : undefined}
+                      />
+                      {!collapsed && <span>Dark Mode</span>}
                     </>
                   )}
                 </Button>

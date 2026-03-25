@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Server, Cpu, HardDrive, Database } from "lucide-react"
 import type { SystemMetrics } from "@/types"
 
@@ -41,13 +42,13 @@ export function MonitoringPage() {
   }
 
   const getStatusColor = (percentage: number) => {
-    if (percentage < 50) return "bg-emerald-500"
-    if (percentage < 80) return "bg-amber-500"
-    return "bg-red-500"
+    if (percentage < 50) return "bg-success"
+    if (percentage < 80) return "bg-warning"
+    return "bg-destructive"
   }
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Server Monitoring</h1>
         <p className="text-muted-foreground">
@@ -56,9 +57,9 @@ export function MonitoringPage() {
       </div>
 
       {error && (
-        <div className="rounded-md bg-destructive/15 p-4 text-destructive">
-          {error}
-        </div>
+        <Alert variant="destructive">
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
       )}
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -67,7 +68,7 @@ export function MonitoringPage() {
             <CardTitle className="text-sm font-medium">System Info</CardTitle>
             <Server className="size-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="flex flex-col gap-2">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Hostname:</span>
               <span className="font-medium">{metrics?.hostname || "-"}</span>
@@ -91,8 +92,8 @@ export function MonitoringPage() {
             <Cpu className="size-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
                   <span>Load Average</span>
                   <span>{metrics?.cpuUsage.toFixed(2) || "0.00"}%</span>
@@ -137,8 +138,8 @@ export function MonitoringPage() {
             <HardDrive className="size-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
                   <span>Used Memory</span>
                   <span>
@@ -176,8 +177,8 @@ export function MonitoringPage() {
             <Database className="size-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <div className="flex justify-between text-sm">
                   <span>Used Disk</span>
                   <span>
