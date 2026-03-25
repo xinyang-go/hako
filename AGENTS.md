@@ -117,8 +117,11 @@ npm run test:e2e:ui   # E2E tests with UI
 | `proxy.ts`                     | Route protection, auth redirects |
 | `lib/auth.ts`                  | JWT sign/verify                  |
 | `lib/db.ts`                    | User CRUD operations             |
+| `lib/wol-db.ts`                | WOL device CRUD operations       |
+| `lib/wol.ts`                   | Magic Packet creation/UDP send   |
 | `components/auth-provider.tsx` | React Context for auth state     |
 | `components/app-sidebar.tsx`   | Collapsible sidebar with nav     |
+| `components/wol-page.tsx`      | Wake on LAN page component       |
 | `types/index.ts`               | Shared TypeScript types          |
 
 ## Verification Checklist

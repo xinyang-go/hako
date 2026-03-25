@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { verifyJWT } from "./lib/auth"
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ["/system", "/api/monitoring", "/api/user"]
+const PROTECTED_ROUTES = ["/system", "/network", "/api/monitoring", "/api/user", "/api/wol"]
 
 // Routes that should redirect to system if already authenticated
 const PUBLIC_ONLY_ROUTES = ["/login"]
@@ -48,8 +48,10 @@ export const proxyConfig = {
   matcher: [
     "/",
     "/system/:path*",
+    "/network/:path*",
     "/login",
     "/api/monitoring/:path*",
     "/api/user/:path*",
+    "/api/wol/:path*",
   ],
 }

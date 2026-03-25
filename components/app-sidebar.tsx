@@ -12,6 +12,8 @@ import {
   Moon,
   ChevronDown,
   Monitor,
+  Wifi,
+  Power,
 } from "lucide-react"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -54,6 +56,11 @@ const navGroups: NavGroup[] = [
       { title: "Setting", href: "/system/setting", icon: Settings },
     ],
   },
+  {
+    title: "Network",
+    icon: Wifi,
+    items: [{ title: "Wake on LAN", href: "/network/wol", icon: Power }],
+  },
 ]
 
 interface AppSidebarProps {
@@ -67,6 +74,7 @@ export function AppSidebar({ collapsed, onToggle }: AppSidebarProps) {
   const { theme, setTheme } = useTheme()
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({
     System: true,
+    Network: true,
   })
 
   const toggleTheme = () => {

@@ -80,15 +80,19 @@ hako/
 ├── app/                          # Next.js App Router
 │   ├── (dashboard)/               # 路由组 - 需要认证的页面
 │   │   ├── layout.tsx            # 仪表板布局
-│   │   ├── system/               # 系统模块
-│   │   │   ├── monitor/          # 监控页面
-│   │   │   │   └── page.tsx
-│   │   │   └── setting/          # 设置页面
+│   │   ├── network/              # 网络模块
+│   │   │   └── wol/              # Wake on LAN 页面
 │   │   │       └── page.tsx
+│   │   └── system/               # 系统模块
+│   │       ├── monitor/          # 监控页面
+│   │       │   └── page.tsx
+│   │       └── setting/          # 设置页面
+│   │           └── page.tsx
 │   ├── api/                      # API 路由
 │   │   ├── auth/route.ts         # 认证 API
 │   │   ├── monitoring/route.ts   # 系统监控 API
-│   │   └── user/route.ts         # 用户管理 API
+│   │   ├── user/route.ts         # 用户管理 API
+│   │   └── wol/route.ts          # Wake on LAN API
 │   ├── login/                    # 登录页面
 │   │   └── page.tsx
 │   ├── globals.css               # 全局样式
@@ -102,6 +106,7 @@ hako/
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── collapsible.tsx
+│   │   ├── dialog.tsx
 │   │   ├── field.tsx
 │   │   ├── input.tsx
 │   │   ├── label.tsx
@@ -118,15 +123,30 @@ hako/
 │   ├── login-form.tsx             # 登录表单
 │   ├── monitoring-page.tsx        # 监控页面组件
 │   ├── settings-page.tsx          # 设置页面组件
-│   └── theme-provider.tsx         # 主题提供者
+│   ├── theme-provider.tsx         # 主题提供者
+│   └── wol-page.tsx               # Wake on LAN 页面组件
 ├── lib/                          # 工具库
 │   ├── auth.ts                   # JWT 认证工具
 │   ├── db.ts                     # 用户数据操作
-│   └── utils.ts                  # 通用工具函数 (cn)
+│   ├── utils.ts                  # 通用工具函数 (cn)
+│   ├── wol-db.ts                 # WOL 设备数据操作
+│   └── wol.ts                    # WOL Magic Packet 工具
 ├── types/                        # TypeScript 类型定义
 │   └── index.ts                  # 共享类型
 ├── data/                         # 数据存储
-│   └── users.json                # 用户数据
+│   ├── users.json                # 用户数据
+│   └── wol-devices.json          # WOL 设备数据
+├── e2e/                          # E2E 测试
+│   ├── login.spec.ts
+│   ├── monitoring.spec.ts
+│   ├── settings.spec.ts
+│   └── wol.spec.ts
+├── lib/__tests__/                # 单元测试
+│   ├── auth.test.ts
+│   ├── db.test.ts
+│   ├── utils.test.ts
+│   ├── wol.test.ts
+│   └── wol-db.test.ts
 ├── proxy.ts                      # Next.js 16+ 路由代理/中间件
 ├── components.json               # shadcn/ui 配置
 └── package.json
@@ -163,13 +183,14 @@ hako/
 
 ```
 ┌────────────────────────────────────┐
-│  [Logo] Admin         [Collapse]  │  <- Header
+│  [Logo] Hako          [Collapse]  │  <- Header
 ├────────────────────────────────────┤
 │  ▼ System (可折叠)                  │
 │    ├─ Monitor                      │
 │    └─ Setting                      │
 │                                    │
-│  (其他导航项...)                    │
+│  ▼ Network (可折叠)                 │
+│    └─ Wake on LAN                  │
 ├────────────────────────────────────┤
 │  [Theme Toggle]                    │  <- Footer
 │  [Avatar] Username    [Logout]     │
@@ -448,6 +469,52 @@ test("example flow", async ({ page }) => {
 | `/login`          | 登录页面                   | 否   |
 | `/system/monitor` | 服务器监控                 | 是   |
 | `/system/setting` | 用户设置                   | 是   |
+| `/network/wol`    | Wake on LAN                | 是   |
 | `/api/auth`       | 认证 API                   | 否   |
 | `/api/monitoring` | 监控数据 API               | 是   |
 | `/api/user`       | 用户管理 API               | 是   |
+| `/api/wol`        | Wake on LAN API            | 是   |
+
+---
+
+## 9. Wake on LAN 功能
+
+### 9.1 功能概述
+
+Wake on LAN (WoL) 是一个网络唤醒功能，允许用户通过网络发送 Magic Packet 来远程唤醒处于睡眠或关机状态的计算机。
+
+### 9.2 技术实现
+
+**Magic Packet 格式**:
+- 6 字节的 `0xFF`（同步流）
+- 16 次重复的目标 MAC 地址
+
+**数据存储**:
+- 设备列表存储在 `data/wol-devices.json`
+- 每个设备包含: id, name, macAddress, broadcastAddress, port, description
+
+**API 端点** (`/api/wol`):
+| 方法 | 操作 |
+|------|------|
+| GET | 获取设备列表或单个设备 |
+| POST | 添加设备或发送唤醒包 (`action: "wake"`) |
+| PUT | 更新设备信息 |
+| DELETE | 删除设备 |
+
+### 9.3 使用方法
+
+1. 导航到 `/network/wol` 页面
+2. 点击 "Add Device" 添加新设备
+3. 填写设备信息:
+   - **Name**: 设备名称
+   - **MAC Address**: 目标设备网卡 MAC 地址
+   - **Broadcast Address**: 广播地址（默认 255.255.255.255）
+   - **Port**: UDP 端口（默认 9）
+4. 点击设备卡片上的 "Wake Up" 发送唤醒包
+
+### 9.4 注意事项
+
+- 目标设备需要在 BIOS/UEFI 中启用 Wake on LAN
+- 目标设备的网卡需要支持 WoL
+- 唤醒包使用 UDP 广播，通常只能在同一子网内工作
+- 不提供投递确认，唤醒是否成功取决于目标设备配置

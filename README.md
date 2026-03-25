@@ -30,6 +30,13 @@
 - 修改用户名和邮箱
 - 修改密码
 
+### 🌐 网络功能
+
+- **Wake on LAN**: 远程唤醒局域网内设备
+  - 添加/管理待唤醒设备
+  - 一键发送 Magic Packet
+  - 支持自定义广播地址和端口
+
 ## 快速开始
 
 ### 环境要求
@@ -114,6 +121,7 @@ npm run format
 hako/
 ├── app/                # Next.js App Router
 │   ├── (dashboard)/    # 受保护的仪表板页面
+│   │   ├── network/    # 网络模块
 │   │   └── system/     # 系统模块（监控、设置）
 │   ├── api/            # API 路由
 │   └── login/          # 登录页面

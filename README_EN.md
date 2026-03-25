@@ -30,6 +30,13 @@ A production-ready server monitoring platform built with Next.js 16 + shadcn/ui,
 - Update username and email
 - Change password
 
+### 🌐 Network Features
+
+- **Wake on LAN**: Remotely wake up devices on your local network
+  - Add/manage devices for wake-up
+  - One-click Magic Packet sending
+  - Support for custom broadcast address and port
+
 ## Quick Start
 
 ### Requirements
@@ -114,6 +121,7 @@ The documentation includes:
 hako/
 ├── app/                # Next.js App Router
 │   ├── (dashboard)/    # Protected dashboard pages
+│   │   ├── network/    # Network module
 │   │   └── system/     # System module (monitoring, settings)
 │   ├── api/            # API routes
 │   └── login/          # Login page

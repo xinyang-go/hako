@@ -49,3 +49,22 @@ export interface UserUpdateData {
   currentPassword?: string
   newPassword?: string
 }
+
+export interface WakeOnLANDevice {
+  id: string
+  name: string
+  macAddress: string
+  broadcastAddress: string
+  port: number
+  description?: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface WakeOnLANDeviceInput {
+  name: string
+  macAddress: string
+  broadcastAddress?: string
+  port?: number
+  description?: string
+}
