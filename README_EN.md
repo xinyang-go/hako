@@ -1,5 +1,7 @@
 # Server Monitoring Platform
 
+[中文](./README.md)
+
 A production-ready server monitoring platform built with Next.js 16 + shadcn/ui, featuring JWT authentication, light/dark theme switching, and real-time system metrics monitoring.
 
 ## Features
