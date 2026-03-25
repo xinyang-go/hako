@@ -44,10 +44,12 @@ export async function POST(request: Request) {
     })
 
     // Set auth cookie
+    const requestUrl = new URL(request.url)
     response.cookies.set("auth-token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: requestUrl.protocol === "https:",
       sameSite: "lax",
+      path: "/",
       maxAge: 7 * 24 * 60 * 60, // 7 days
     })
 
