@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getUserByUsername } from "@/lib/db"
-import { signJWT, verifyJWT } from "@/lib/auth"
+import { signJWT, verifyJWT, verifyPassword } from "@/lib/auth"
 import type { UserWithoutPassword } from "@/types"
 
 export async function POST(request: Request) {
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     const user = getUserByUsername(username)
 
-    if (!user || user.password !== password) {
+    if (!user || !(await verifyPassword(password, user.password))) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }

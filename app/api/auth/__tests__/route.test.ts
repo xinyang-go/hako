@@ -12,6 +12,7 @@ vi.mock("@/lib/auth", async () => {
     ...actual,
     signJWT: vi.fn().mockResolvedValue("mocked-jwt-token"),
     verifyJWT: vi.fn(),
+    verifyPassword: vi.fn(),
   }
 })
 
@@ -73,13 +74,16 @@ describe("Auth API", () => {
       const mockUser = {
         id: "1",
         username: "admin",
-        password: "admin123",
+        password: "hashed:password",
         email: "admin@example.com",
         createdAt: "2024-01-01T00:00:00.000Z",
         updatedAt: "2024-01-01T00:00:00.000Z",
       }
       const { getUserByUsername } = await import("@/lib/db")
       vi.mocked(getUserByUsername).mockReturnValue(mockUser)
+
+      const { verifyPassword } = await import("@/lib/auth")
+      vi.mocked(verifyPassword).mockResolvedValue(true)
 
       const { POST } = await import("@/app/api/auth/route")
       const request = new Request("http://localhost/api/auth", {

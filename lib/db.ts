@@ -1,21 +1,26 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs"
 import { join } from "path"
+import { scryptSync, randomBytes } from "crypto"
 import type { User } from "@/types"
 
 const DATA_DIR = join(process.cwd(), "data")
 const USERS_FILE = join(DATA_DIR, "users.json")
 
-// Ensure data directory exists
+function hashPasswordSync(password: string): string {
+  const salt = randomBytes(16).toString("hex")
+  const derivedKey = scryptSync(password, salt, 64)
+  return `${salt}:${derivedKey.toString("hex")}`
+}
+
 if (!existsSync(DATA_DIR)) {
   mkdirSync(DATA_DIR, { recursive: true })
 }
 
-// Initialize with default user if file doesn't exist
 if (!existsSync(USERS_FILE)) {
   const defaultUser: User = {
     id: "1",
     username: process.env.ADMIN_USERNAME || "admin",
-    password: process.env.ADMIN_PASSWORD || "admin123",
+    password: hashPasswordSync(process.env.ADMIN_PASSWORD || "admin123"),
     email: process.env.ADMIN_EMAIL || "admin@example.com",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

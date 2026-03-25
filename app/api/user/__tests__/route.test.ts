@@ -8,6 +8,8 @@ vi.mock("@/lib/db", () => ({
 
 vi.mock("@/lib/auth", () => ({
   verifyJWT: vi.fn(),
+  verifyPassword: vi.fn(),
+  hashPassword: vi.fn().mockResolvedValue("hashed:newpassword"),
 }))
 
 describe("User API", () => {
@@ -89,18 +91,19 @@ describe("User API", () => {
     })
 
     it("should return 400 when current password is incorrect", async () => {
-      const { verifyJWT } = await import("@/lib/auth")
+      const { verifyJWT, verifyPassword } = await import("@/lib/auth")
       vi.mocked(verifyJWT).mockResolvedValue({
         userId: "1",
         username: "admin",
         iat: 0,
         exp: 0,
       })
+      vi.mocked(verifyPassword).mockResolvedValue(false)
 
       const mockUser = {
         id: "1",
         username: "admin",
-        password: "admin123",
+        password: "hashed:password",
         email: "admin@example.com",
         createdAt: "2024-01-01T00:00:00.000Z",
         updatedAt: "2024-01-01T00:00:00.000Z",

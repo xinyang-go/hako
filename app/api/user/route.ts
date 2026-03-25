@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { getUserById, updateUser } from "@/lib/db"
-import { verifyJWT } from "@/lib/auth"
+import { verifyJWT, verifyPassword, hashPassword } from "@/lib/auth"
 import type { UserWithoutPassword } from "@/types"
 
 export async function PUT(request: Request) {
@@ -28,8 +28,10 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 })
     }
 
-    // Verify current password if changing password
-    if (newPassword && currentPassword !== user.password) {
+    if (
+      newPassword &&
+      !(await verifyPassword(currentPassword, user.password))
+    ) {
       return NextResponse.json(
         { error: "Current password is incorrect" },
         { status: 400 }
@@ -39,7 +41,7 @@ export async function PUT(request: Request) {
     const updates: Partial<typeof user> = {}
     if (username !== undefined) updates.username = username
     if (email !== undefined) updates.email = email
-    if (newPassword) updates.password = newPassword
+    if (newPassword) updates.password = await hashPassword(newPassword)
 
     const updatedUser = updateUser(payload.userId, updates)
 

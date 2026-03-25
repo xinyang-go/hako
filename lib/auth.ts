@@ -1,5 +1,9 @@
 import { SignJWT, jwtVerify } from "jose"
+import { scrypt, timingSafeEqual, randomBytes } from "crypto"
+import { promisify } from "util"
 import type { JWTPayload } from "@/types"
+
+const scryptAsync = promisify(scrypt)
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "your-secret-key-change-this-in-production"
@@ -31,4 +35,25 @@ export function extractTokenFromHeader(
 ): string | null {
   if (!authHeader?.startsWith("Bearer ")) return null
   return authHeader.substring(7)
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  const salt = randomBytes(16).toString("hex")
+  const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer
+  return `${salt}:${derivedKey.toString("hex")}`
+}
+
+export async function verifyPassword(
+  password: string,
+  hashedPassword: string
+): Promise<boolean> {
+  const [salt, storedHash] = hashedPassword.split(":")
+  if (!salt || !storedHash) return false
+
+  const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer
+  const storedKey = Buffer.from(storedHash, "hex")
+
+  if (derivedKey.length !== storedKey.length) return false
+
+  return timingSafeEqual(derivedKey, storedKey)
 }
