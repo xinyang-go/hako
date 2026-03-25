@@ -96,12 +96,21 @@ hako/
 │   └── page.tsx                  # 首页 (重定向)
 ├── components/                   # React 组件
 │   ├── ui/                       # shadcn/ui 组件
+│   │   ├── alert.tsx
+│   │   ├── avatar.tsx
+│   │   ├── badge.tsx
 │   │   ├── button.tsx
 │   │   ├── card.tsx
 │   │   ├── collapsible.tsx
+│   │   ├── field.tsx
 │   │   ├── input.tsx
 │   │   ├── label.tsx
+│   │   ├── separator.tsx
+│   │   ├── sheet.tsx
+│   │   ├── skeleton.tsx
+│   │   ├── sonner.tsx
 │   │   ├── switch.tsx
+│   │   ├── tooltip.tsx
 │   │   └── ... (其他 shadcn 组件)
 │   ├── app-sidebar.tsx           # 应用侧边栏
 │   ├── auth-provider.tsx          # 认证上下文提供者
@@ -208,7 +217,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export function ExamplePage() {
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Example</h1>
         <p className="text-muted-foreground">Example page description</p>
@@ -319,9 +328,11 @@ npx shadcn@latest add <component-name>
 
 常用组件:
 
-- `button`, `card`, `input`, `label` - 基础组件
+- `button`, `card`, `input` - 基础组件
+- `field`, `field-group` - 表单组件
 - `switch`, `toggle` - 开关组件
 - `badge`, `avatar` - 展示组件
+- `alert` - 提示组件
 - `tooltip`, `dialog`, `sheet` - 浮层组件
 - `collapsible` - 可折叠组件
 - `separator`, `skeleton` - 辅助组件
@@ -337,6 +348,8 @@ npx shadcn@latest add <component-name>
 | `lib/db.ts`                    | 用户数据读写（JSON 文件）                    |
 | `components/auth-provider.tsx` | React Context，提供全局认证状态              |
 | `components/app-sidebar.tsx`   | 可折叠侧边栏，包含导航和用户信息             |
+| `components/ui/alert.tsx`      | 警告提示组件                                 |
+| `components/ui/field.tsx`      | 表单字段组件（FieldGroup/Field/FieldLabel）  |
 
 ---
 
@@ -422,7 +435,8 @@ test("example flow", async ({ page }) => {
 2. **类型**: 自定义类型定义在 `types/index.ts`，组件使用 `import type { ... } from '@/types'`
 3. **主题**: 使用 `useTheme()` from `next-themes`，主题切换按钮已集成在侧边栏
 4. **样式**: 遵循 shadcn/ui 规范，使用语义化颜色如 `bg-background`、`text-muted-foreground`
-5. **组件**: 优先使用 shadcn/ui 组件，参考 `components.json` 中的配置
+5. **语义颜色**: 可使用 `success`（绿色）和 `warning`（黄色）表示状态，如进度条颜色
+6. **组件**: 优先使用 shadcn/ui 组件，参考 `components.json` 中的配置
 
 ---
 
