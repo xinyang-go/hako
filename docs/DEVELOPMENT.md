@@ -35,6 +35,14 @@
 - [ ] 了解项目使用的 shadcn 风格（`radix-nova`）和基础库（`radix`）
 - [ ] 确认组件已安装：`npx shadcn@latest info`
 
+### 完成后检查清单
+
+- [ ] `npm run typecheck` 通过
+- [ ] `npm run lint` 通过
+- [ ] `npm run test` 通过（单元测试）
+- [ ] `npm run test:e2e` 通过（E2E 测试）
+- [ ] `npm run build` 成功
+
 ---
 
 ## 1. 项目环境介绍
@@ -352,6 +360,58 @@ npm run build
 
 # 启动生产服务器
 npm run start
+
+# 单元测试 (Vitest)
+npm run test
+
+# 单元测试 - 监视模式
+npm run test:watch
+
+# E2E 测试 (Playwright)
+npm run test:e2e
+
+# E2E 测试 - UI 模式
+npm run test:e2e:ui
+```
+
+---
+
+## 6.1 测试指南
+
+### 测试文件位置
+
+- **单元测试**: `lib/__tests__/*.test.ts` - 工具函数和库的测试
+- **API 测试**: `app/api/*/__tests__/route.test.ts` - API 路由的测试
+- **E2E 测试**: `e2e/*.spec.ts` - 端到端测试
+
+### 测试配置
+
+- **Vitest**: `vitest.config.ts` - 单元测试配置
+- **Playwright**: `playwright.config.ts` - E2E 测试配置
+
+### 编写新测试
+
+**单元测试示例** (`lib/__tests__/example.test.ts`):
+
+```tsx
+import { describe, it, expect } from "vitest"
+
+describe("example", () => {
+  it("should do something", () => {
+    expect(true).toBe(true)
+  })
+})
+```
+
+**E2E 测试示例** (`e2e/example.spec.ts`):
+
+```tsx
+import { test, expect } from "@playwright/test"
+
+test("example flow", async ({ page }) => {
+  await page.goto("/login")
+  await expect(page.getByText("Welcome back")).toBeVisible()
+})
 ```
 
 ---

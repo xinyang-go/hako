@@ -101,6 +101,15 @@ npx shadcn@latest add <component-name>
 npm run typecheck && npm run lint && npm run build
 ```
 
+### Run tests
+
+```bash
+npm run test          # Unit tests (Vitest)
+npm run test:watch    # Watch mode for unit tests
+npm run test:e2e      # E2E tests (Playwright)
+npm run test:e2e:ui   # E2E tests with UI
+```
+
 ## File Quick Reference
 
 | File                           | Purpose                          |
