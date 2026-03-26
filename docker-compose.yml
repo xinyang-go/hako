@@ -1,0 +1,28 @@
+services:
+  hako:
+    build: .
+    container_name: hako
+    network_mode: host
+    volumes:
+      - hako-data:/app/data
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "wget",
+          "--quiet",
+          "--tries=1",
+          "--spider",
+          "http://localhost:5678",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  hako-data:
+    driver: local

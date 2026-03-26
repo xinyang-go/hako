@@ -104,6 +104,10 @@ npm run format
 - 新页面/功能开发指导
 - 组件使用规范
 
+## Docker 部署
+
+使用 Docker 部署请参阅：[Docker 部署指南](./docs/DOCKER.md)
+
 ## 技术栈
 
 | 技术         | 用途      |

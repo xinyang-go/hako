@@ -104,6 +104,10 @@ The documentation includes:
 - New page/feature development guide
 - Component usage standards
 
+## Docker Deployment
+
+For Docker deployment instructions, please refer to: [Docker Deployment Guide](./docs/DOCKER.md)
+
 ## Tech Stack
 
 | Tech         | Purpose          |
